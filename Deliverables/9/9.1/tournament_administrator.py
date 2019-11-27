@@ -178,10 +178,10 @@ def main():
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         len_ = len(sys.argv)
-        raise Exception('Wrong Number of Arguments' + str(len_))
+        raise Exception('Wrong Number of Arguments ' + str(len_))
     _, match_type, n = sys.argv
     if match_type not in ['-league', '-cup']:
-        raise Exception('Wrong Game Type')
+        raise Exception('Wrong Game Type ' + match_type)
     if not n.isnumeric():
         raise Exception('Please enter the valid format for remote player number')
     n = int(n)
