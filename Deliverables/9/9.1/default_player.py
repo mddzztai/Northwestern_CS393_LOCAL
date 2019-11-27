@@ -73,10 +73,13 @@ class player(game_player):
             return "This history makes no sense!"
         else:
             curBoard = Board(Boards[0])
-            for j in range(BOARD_LENGTH):
-                for i in range(BOARD_LENGTH):
+            choice = []
+            for i in range(BOARD_LENGTH):
+                for j in range(BOARD_LENGTH):
                     if self.RC.check_if_move_valid(self.stone,(i,j),Boards): 
-                        return (j,i)
+                        choice.append((i,j))
+            if len(choice) > 1:
+                return random.choice(choice)
             return "pass"
     
     def capture_strategy(self, Boards):
@@ -102,10 +105,10 @@ class player(game_player):
 
     def testing_strategy1(self, board_history):
         num = random.randint(1,100)
-        for i in range(BOARD_LENGTH):
-            for j in range(BOARD_LENGTH):
-                if board_history[0][i][j] == ' ':
-                    return tuple_to_string((i,j))
+        if num < 50:
+            return 'the is a invalid move'
+        else:
+            return self.dummy_strategy(board_history)
 
     # return a list of possible coordinates we can choose given self.n
     # return T /F, if T adds to the list of possible coordinates
@@ -164,11 +167,18 @@ class player(game_player):
     def make_move(self, Boards):
         if self.state == 'ready':
             if self.n==0: 
-                return self.dummy_strategy(Boards)
+                move =  self.dummy_strategy(Boards)
             else: 
-                return self.capture_strategy(Boards)
+                move =  self.testing_strategy1(Boards)
+            #print(move)
+            move = tuple_to_string(move)
+            #print(move)
+            return move
         else:
             raise Player_Exception('player is not ready yet')
+    def reset(self):
+        self.state = 'registered'
+        
     
 class remote_player(player):
     def __init__(self, conn):
@@ -202,14 +212,17 @@ class remote_player(player):
     def get_name(self):
         return self.name
     
-    def finish_game(self):
+    def reset(self):
         mess = ['end-game']
         mess = json.dumps(mess)
-        self.conn.send((mess.encode()))
-        result = self.conn.recv(6000).decode()
-        if result != 'OK':
-            raise Player_Exception('Player disconnect during ending game state')
-        player.state = 'registered'
+        try:
+            self.conn.send((mess.encode()))
+            result = self.conn.recv(6000).decode()
+            if result != 'OK':
+                self.clean_up()
+        except:
+            pass
+        
     
 
     def clean_up(self):

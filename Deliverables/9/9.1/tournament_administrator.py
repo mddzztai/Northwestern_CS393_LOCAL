@@ -67,7 +67,7 @@ def main():
         player[name] = local_player
     
     # round robin
-    if match_type == '-league':
+    if match_type == '--league':
         score_board = [[(0,"")] * total_n] * total_n
         current_player_pool = []
         cheater_list = []
@@ -85,9 +85,8 @@ def main():
                 else:
                     score_board[first_player_index][second_player_index] = (0, current_player_pool[second_player_index])
                     score_board[second_player_index][first_player_index] = (1, current_player_pool[first_player_index])
-
+                
                 #if there is one cheater
-        
                 if cheater:
                     cheater_index = first_player_index if cheater == current_player_pool[first_player_index] else second_player_index
                     for oppo_index in range(len(score_board[cheater_index])):
@@ -102,14 +101,14 @@ def main():
                             score_board[cheater_index][oppo_index] = (-1, -1)
 
                         # switch the play if it is a remote player
-                    if isinstance(player[current_player_pool[cheater_index]], foo.remote_player):
-                        cheater_list.append(current_player_pool[cheater_index])
-                        local_player_count += 1
-                        local_player = foo.player()
-                        local_player.set_name('local' + str(local_player_count))
-                        name = local_player.register()
-                        player[name] = local_player
-                        current_player_pool[cheater_index] = name
+                    
+                    cheater_list.append(current_player_pool[cheater_index])
+                    local_player_count += 1
+                    local_player = foo.player()
+                    local_player.set_name('local' + str(local_player_count))
+                    name = local_player.register()
+                    player[name] = local_player
+                    current_player_pool[cheater_index] = name
            
             score = dict()
 
@@ -125,11 +124,8 @@ def main():
             score[name] = -1
             
         rank = cal_rank(score)
-
-        for name in player:
-            if isinstance(player[name], foo.remote_player):
-                player_index[name].clean_up()
         # print(score_board)
+        
         print(rank)
 
 
@@ -170,10 +166,13 @@ def main():
         
         rank = cal_rank(score_board)
         print(rank)
-
+    
     for name in player:
-        if isinstance(player[name],remote_player):
-            player[name].clean_up()
+        if isinstance(player[name], foo.remote_player):
+            try:
+                player[name].clean_up()
+            except:
+                continue
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
