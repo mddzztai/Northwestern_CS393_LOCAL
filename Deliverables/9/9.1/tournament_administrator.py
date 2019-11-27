@@ -180,7 +180,7 @@ if __name__ == "__main__":
         len_ = len(sys.argv)
         raise Exception('Wrong Number of Arguments ' + str(len_))
     _, match_type, n = sys.argv
-    if match_type not in ['-league', '-cup']:
+    if match_type not in ['--league', '--cup']:
         raise Exception('Wrong Game Type ' + match_type)
     if not n.isnumeric():
         raise Exception('Please enter the valid format for remote player number')
