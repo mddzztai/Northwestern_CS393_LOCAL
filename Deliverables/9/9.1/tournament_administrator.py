@@ -27,6 +27,9 @@ def main():
         expo += 1
     total_n = 2 ** expo
 
+    if total_n == 1:
+        total_n = 2
+
     player = dict()
     local_player_count = 0
     
@@ -38,16 +41,21 @@ def main():
     foo = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(foo)
     
+    print('setting up the socket')
+    
     # set up the socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(add)
     s.listen(10)
-
-    for _ in range(n):
+    
+    print('waiting for ' + str(n) + ' connections')
+    
+    for i in range(n):
         conn, _ = s.accept()
         rm_player = foo.remote_player(conn)
         name = rm_player.register()
         player[name] = rm_player
+        print('remote player ' + str(i) +' has connected to the game')
     
     s.close()
 
