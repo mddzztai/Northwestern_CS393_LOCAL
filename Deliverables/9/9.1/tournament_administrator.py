@@ -5,7 +5,7 @@ import sys
 import importlib.util
 
 def cal_rank(dict):
-    #print(dict)
+    # calculate the rank from the given scoreboard
     rank = []
     for name, score in dict.items():
         rank.append((score,name))
@@ -27,10 +27,14 @@ def main():
         expo += 1
     total_n = 2 ** expo
 
-    if total_n == 1:
+    # ???question???: if n = 0, should we conduct the tournament
+    if total_n <= 1:
         total_n = 2
 
+    # the map that maps the name of player to the player object
     player = dict()
+
+    # the count for local players
     local_player_count = 0
     
     # get the config
@@ -59,10 +63,12 @@ def main():
     
     s.close()
 
-    for _ in range(n, total_n):
+    # set up the local players
+    for _ in range(total_n):
         local_player = foo.player()
         local_player_count += 1
         local_player.set_name('local' + str(local_player_count))
+        local_player.set_n(1)
         name = local_player.register()
         player[name] = local_player
     
