@@ -174,7 +174,7 @@ def main():
     for name in player:
         if isinstance(player[name],remote_player):
             player[name].clean_up()
-
+#
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         len_ = len(sys.argv)
