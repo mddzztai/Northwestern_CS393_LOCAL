@@ -64,7 +64,7 @@ def main():
     s.close()
 
     # set up the local players
-    for _ in range(total_n):
+    for _ in range(n, total_n):
         local_player = foo.player()
         local_player_count += 1
         local_player.set_name('local' + str(local_player_count))
