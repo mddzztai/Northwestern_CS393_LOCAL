@@ -10,6 +10,7 @@ def cal_rank(dict):
     for name, score in dict.items():
         rank.append((score,name))
     rank.sort(reverse = True)
+    print(rank)
     rank_num = 0
     current_score = float('inf')
 
@@ -50,7 +51,7 @@ def main():
     # set up the socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(add)
-    s.listen(10)
+    s.listen(n)
     
     print('waiting for ' + str(n) + ' connections')
     
@@ -64,11 +65,12 @@ def main():
     s.close()
 
     # set up the local players
-    for _ in range(n, total_n):
+    for i in range(n, total_n):
         local_player = foo.player()
         local_player_count += 1
         local_player.set_name('local' + str(local_player_count))
-        local_player.set_n(1)
+        # if i == 2:
+        #     local_player.set_n(1)
         name = local_player.register()
         player[name] = local_player
     
@@ -79,21 +81,27 @@ def main():
         cheater_list = []
         for name in player:
             current_player_pool.append(name)
+        #print(current_player_pool)
         for first_player_index in range(total_n):
             for second_player_index in range(first_player_index + 1, total_n):
                 
                 R = Referee(player[current_player_pool[first_player_index]], player[current_player_pool[second_player_index]])
                 winner, cheater = R.start_match()
+                #print(player[current_player_pool[first_player_index]], player[current_player_pool[second_player_index]], winner)
                 # if the first player win
                 if winner == current_player_pool[first_player_index]:
+                    #print(score_board[first_player_index][second_player_index])
                     score_board[first_player_index][second_player_index] = (1, current_player_pool[second_player_index])
                     score_board[second_player_index][first_player_index] = (0, current_player_pool[first_player_index])
+                    #print(score_board[first_player_index][second_player_index])
                 else:
                     score_board[first_player_index][second_player_index] = (0, current_player_pool[second_player_index])
                     score_board[second_player_index][first_player_index] = (1, current_player_pool[first_player_index])
                 
+                #print(score_board)
                 #if there is one cheater
                 if cheater:
+                    print(1)
                     cheater_index = first_player_index if cheater == current_player_pool[first_player_index] else second_player_index
                     for oppo_index in range(len(score_board[cheater_index])):
                         # change the score for the opponents that this cheater has defeated
@@ -116,8 +124,8 @@ def main():
                     player[name] = local_player
                     current_player_pool[cheater_index] = name
            
-            score = dict()
-
+        score = dict()
+        print(score_board)
         for name in player:
             score[name] = 0
         
@@ -148,16 +156,16 @@ def main():
         
         while not find_champion:
             l, r = 0, len(prev_stage) - 1
-            
+            #print(score_board)
             while l < r:
                 R = Referee(player[prev_stage[l]], player[prev_stage[r]])
                 winner, cheater = R.start_match()
                 next_stage.append(winner)
                 if cheater:    
                     cheater_list.append(cheater)
-                for winner in next_stage:
-                    score_board[winner] += 1
                 
+                score_board[winner] += 1
+                #print(player[prev_stage[l]].name, player[prev_stage[r]].name, winner)
                 l += 1
                 r -= 1
             if len(next_stage) == 1:
