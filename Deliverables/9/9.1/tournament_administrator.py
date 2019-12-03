@@ -53,14 +53,16 @@ def main():
     for i in range(n):
         conn, _ = s.accept()
         rm_player = foo.remote_player(conn)
+        
+        name = rm_player.register()
         try:
-            name = rm_player.register()
             if player[name] is not None:
-                raise Player_Exception('player with same name register')
-            else:
+                rm_player.clean_up()
+                raise Player_Exception('player with same name registered')
+
+        except KeyError:
                 player[name] = rm_player
                 print('remote player ' + str(i) +' has connected to the game')
-            
         except Player_Exception:
             local_player = foo.player()
             local_player_count += 1
