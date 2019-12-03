@@ -27,13 +27,10 @@ def main():
         expo += 1
     total_n = 2 ** expo
 
-    if total_n <= 1:
+    if total_n == 1:
         total_n = 2
 
-    # the map that maps the name of player to the player object
     player = dict()
-
-    # the count for local players
     local_player_count = 0
     
     # get the config
@@ -46,7 +43,7 @@ def main():
     
     print('setting up the socket')
     
-    # # set up the socket
+    # set up the socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(add)
     s.listen(n)
@@ -60,10 +57,9 @@ def main():
         player[name] = rm_player
         print('remote player ' + str(i) +' has connected to the game')
     
-    # s.close()
+    s.close()
 
-    # set up the local players
-    for i in range(n, total_n):
+    for _ in range(n, total_n):
         local_player = foo.player()
         local_player_count += 1
         local_player.set_name('local' + str(local_player_count))
