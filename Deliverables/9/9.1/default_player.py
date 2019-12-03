@@ -193,9 +193,10 @@ class remote_player(player):
         result = self.conn.recv(4096)
         result = json.loads(result.decode())
         print(result)
-        if not isinstance(result, str) or result == "GO has gone crazy!":
+        if not isinstance(result, str):
             raise Player_Exception('player has invalid name')
-        
+        if result == "GO has gone crazy!":
+            raise Player_Exception('player has invalid name')
         self.name = result
         return result
 
