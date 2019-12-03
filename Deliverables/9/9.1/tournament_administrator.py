@@ -75,7 +75,7 @@ def main():
         local_player.set_name('local' + str(local_player_count))
         name = local_player.register()
         player[name] = local_player
-    
+    print(player)
     # round robin
     if match_type == '--league':
         score_board = []
