@@ -195,8 +195,8 @@ class remote_player(player):
         print(result)
         if not isinstance(result, str):
             raise Player_Exception('player has invalid name')
-        if result == "GO has gone crazy!":
-            raise Player_Exception('player has invalid name')
+        
+        raise Player_Exception('player has invalid name')
         self.name = result
         return result
 
