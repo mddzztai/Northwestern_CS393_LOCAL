@@ -191,7 +191,7 @@ class remote_player(player):
         mess = json.dumps(mess)
         self.conn.send((mess.encode()))
         result = self.conn.recv(4096)
-        result = result.decode()
+        result = json.loads(result.decode())
         print(result)
         if not isinstance(result, str) or result == "GO has gone crazy!":
             raise Player_Exception('player has invalid name')
@@ -208,7 +208,7 @@ class remote_player(player):
         mess = ['make-a-move',Board]
         mess = json.dumps(mess)
         self.conn.send((mess.encode()))
-        result = self.conn.recv(6000).decode()
+        result = json.loads(self.conn.recv(6000).decode())
         return result
 
     def get_name(self):
