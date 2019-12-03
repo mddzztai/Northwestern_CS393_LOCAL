@@ -29,7 +29,7 @@ def main():
 
     if total_n == 1:
         total_n = 2
-    print(n, total_n)
+
     player = dict()
     local_player_count = 0
     
@@ -46,16 +46,26 @@ def main():
     # set up the socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(add)
-    s.listen(10)
+    s.listen(n)
     
     print('waiting for ' + str(n) + ' connections')
     
     for i in range(n):
         conn, _ = s.accept()
         rm_player = foo.remote_player(conn)
-        name = rm_player.register()
-        player[name] = rm_player
-        print('remote player ' + str(i) +' has connected to the game')
+        try:
+            name = rm_player.register()
+            player[name] = rm_player
+            print('remote player ' + str(i) +' has connected to the game')
+        
+        except Player_Exception:
+            local_player = foo.player()
+            local_player_count += 1
+            local_player.set_name('local' + str(local_player_count))
+            name = local_player.register()
+            player[name] = local_player
+            
+        
     
     s.close()
 
@@ -80,11 +90,9 @@ def main():
             current_player_pool.append(name)
         for first_player_index in range(total_n):
             for second_player_index in range(first_player_index + 1, total_n):
-                print(player)
-                print(len(current_player_pool))
-                print(first_player_index, second_player_index)
                 R = Referee(player[current_player_pool[first_player_index]], player[current_player_pool[second_player_index]])
                 winner, cheater = R.start_match()
+                
                 # if the first player win
                 if winner == current_player_pool[first_player_index]:
                     score_board[first_player_index][second_player_index] = (1, current_player_pool[second_player_index])
@@ -122,7 +130,6 @@ def main():
                     current_player_pool[cheater_index] = name
         
         score = dict()
-        print(score_board)
         for name in player:
             score[name] = 0
         
