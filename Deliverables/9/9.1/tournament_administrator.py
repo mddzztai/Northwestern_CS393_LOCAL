@@ -46,7 +46,7 @@ def main():
     # set up the socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(add)
-    s.listen(n)
+    s.listen(10)
     
     print('waiting for ' + str(n) + ' connections')
     
