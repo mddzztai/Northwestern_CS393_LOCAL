@@ -55,9 +55,12 @@ def main():
         rm_player = foo.remote_player(conn)
         try:
             name = rm_player.register()
-            player[name] = rm_player
-            print('remote player ' + str(i) +' has connected to the game')
-        
+            if player[name]:
+                raise Player_Exception('player with same name register')
+            else:
+                player[name] = rm_player
+                print('remote player ' + str(i) +' has connected to the game')
+            
         except Player_Exception:
             local_player = foo.player()
             local_player_count += 1
