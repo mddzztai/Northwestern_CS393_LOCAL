@@ -29,7 +29,7 @@ def main():
 
     if total_n == 1:
         total_n = 2
-
+    print(n, total_n)
     player = dict()
     local_player_count = 0
     
@@ -80,7 +80,7 @@ def main():
             current_player_pool.append(name)
         for first_player_index in range(total_n):
             for second_player_index in range(first_player_index + 1, total_n):
-                print(len(player))
+                print(player)
                 print(len(current_player_pool))
                 print(first_player_index, second_player_index)
                 R = Referee(player[current_player_pool[first_player_index]], player[current_player_pool[second_player_index]])
