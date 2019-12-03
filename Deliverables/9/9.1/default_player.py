@@ -192,6 +192,7 @@ class remote_player(player):
         self.conn.send((mess.encode()))
         result = self.conn.recv(4096)
         result = result.decode()
+        print(result)
         if not isinstance(result, str) or result == "GO has gone crazy!":
             raise Player_Exception('player has invalid name')
         
