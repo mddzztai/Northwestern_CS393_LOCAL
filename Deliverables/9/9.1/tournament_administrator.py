@@ -55,7 +55,7 @@ def main():
         rm_player = foo.remote_player(conn)
         try:
             name = rm_player.register()
-            if player[name]:
+            if player[name] is not None:
                 raise Player_Exception('player with same name register')
             else:
                 player[name] = rm_player
